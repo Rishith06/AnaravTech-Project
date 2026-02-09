@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import './index.css';
 import AppointmentList from './components/AppointmentList';
 import PatientSidebar from './components/PatientSidebar';

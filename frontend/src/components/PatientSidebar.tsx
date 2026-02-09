@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // Types for the sidebar items
 interface SidebarItem {

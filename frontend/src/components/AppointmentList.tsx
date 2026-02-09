@@ -14,7 +14,7 @@ interface AppointmentListProps {
 
 const AppointmentList = ({
   resourceName = "Unknown",
-  resourceCount,
+  resourceCount = 9999,
   appointments,
   startHour,
   endHour,
@@ -22,6 +22,8 @@ const AppointmentList = ({
   width = '300px', 
 }: AppointmentListProps) => {
   
+
+    resourceCount += 1;
   // Calculate relative time minutes
   const timeToMinutes = (time: string): number => {
     const [hours, minutes] = time.split(':').map(Number);
