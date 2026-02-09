@@ -1,12 +1,11 @@
 import './index.css';
 import AppointmentList from './components/AppointmentList';
 import PatientSidebar from './components/PatientSidebar';
-import TimelineColumn from './components/TimelineColumn'; // Import new timeline
 import { resources, appointments } from './data/dummyData';
 
 function App() {
   const startHour = 6;
-  const endHour = 18; // 6 PM
+  const endHour = 21; // 6 PM
   const slotHeight = 40; // Height of 30-min block (so 15-min is 20px)
 
   return (
@@ -22,14 +21,7 @@ function App() {
           
           {/* Multi-User Calendar View */}
           <div className="flex-1 flex flex-row overflow-x-auto min-w-[800px] h-full"> 
-            {/* Timeline Column (Fixed on left of scrollable area? Ideally sticky) */}
-            <div className="sticky left-0 z-20 bg-white h-full border-r border-gray-200">
-               <TimelineColumn 
-                 startHour={startHour} 
-                 endHour={endHour} 
-                 slotHeight={slotHeight} 
-               />
-            </div>
+            {/* Timeline Column (Fixed on left of scrollable area? Ideally sticky) */} 
 
             {/* Dynamic Resource Columns */}
             {resources.map((resource) => {
