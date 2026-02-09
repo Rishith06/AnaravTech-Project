@@ -47,6 +47,28 @@ const AppointmentList = ({
   const totalSlots = (endHour - startHour) * 4;
   const totalHeight = totalSlots * (slotHeight / 2);
 
+  const sortedAppointments = [...appointments].sort((a, b) => 
+    timeToMinutes(a.startTime) - timeToMinutes(b.startTime)
+  );
+
+  const processedAppointments: (Appointment & { indent: number })[] = [];
+  
+  // Calculate indents
+  sortedAppointments.forEach(apt => {
+    const start = timeToMinutes(apt.startTime);
+    // Find overlaps within processed
+    const overlaps = processedAppointments.filter(prev => {
+        const prevEnd = timeToMinutes(prev.endTime);
+        return prevEnd > start;
+    });
+    
+    const maxPrevIndent = overlaps.length > 0 
+        ? Math.max(...overlaps.map(p => p.indent)) 
+        : -8;
+
+    processedAppointments.push({ ...apt, indent: maxPrevIndent + 8 });
+  });
+
   return (
     <div 
       className="flex flex-col h-full border-r border-gray-300 flex-shrink-0" // Added flex-shrink-0 so it respects width
@@ -94,20 +116,28 @@ const AppointmentList = ({
             ))}
 
             {/* Appointments */}
-            {appointments.map((appointment) => (
-              <div
-                key={appointment.id}
-                className="absolute"
-                style={{
-                  top: `${getTopPosition(appointment.startTime)}px`,
-                  height: `${getHeight(appointment.startTime, appointment.endTime)}px`,
-                  left: '0', 
-                  right: '4px',
-                }}
-              >
-                <AppointmentCard appointment={appointment} />
-              </div>
-            ))}
+            {processedAppointments.map((appointment) => {
+               const top = getTopPosition(appointment.startTime);
+               const height = getHeight(appointment.startTime, appointment.endTime);
+               const zIndex = 10 + (appointment.indent / 8); 
+
+               return (
+                <div
+                  key={appointment.id}
+                  className="absolute"
+                  style={{
+                    top: `${top}px`,
+                    height: `${height}px`,
+                    left: '0px', 
+                    right: `${appointment.indent}px`, 
+                    zIndex, 
+                  }}
+                >
+                  <AppointmentCard appointment={appointment} />
+                </div>
+               );
+             })}
+
           </div>
         </div>
       </div>
